@@ -71,39 +71,39 @@ void update_rgb_for_homerow_mods(uint16_t keycode, smtd_action action) {
         homerow_mod_active = true; // Set the flag
         
         switch (keycode) {
-            // Left-hand home row mods
+            // Left-hand home row mods - use our custom animation that only affects left side
             case HRM_A:  // GUI - Pink
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
                 rgb_matrix_sethsv_noeeprom(HSV_PINK);
                 break;
             case HRM_S:  // ALT - Green
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
                 rgb_matrix_sethsv_noeeprom(HSV_GREEN);
                 break;
             case HRM_D:  // CTRL - Blue
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
                 rgb_matrix_sethsv_noeeprom(HSV_BLUE);
                 break;
             case HRM_F:  // SHIFT - Yellow
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
                 rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
                 break;
             
-            // Right-hand home row mods
+            // Right-hand home row mods - use our custom animation that only affects right side
             case HRM_J:  // SHIFT - Yellow
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
                 rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
                 break;
             case HRM_K:  // CTRL - Blue
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
                 rgb_matrix_sethsv_noeeprom(HSV_BLUE);
                 break;
             case HRM_L:  // ALT - Green
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
                 rgb_matrix_sethsv_noeeprom(HSV_GREEN);
                 break;
             case HRM_QUOT:  // GUI - Pink
-                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
                 rgb_matrix_sethsv_noeeprom(HSV_PINK);
                 break;
         }
