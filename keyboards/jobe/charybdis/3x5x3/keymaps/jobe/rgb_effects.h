@@ -29,108 +29,90 @@ extern layer_state_t layer_state;
 layer_state_t layer_state_set_user(layer_state_t state);
 #endif
 
+// Save the default RGB matrix mode
+static uint8_t saved_rgb_matrix_mode = RGB_MATRIX_SOLID_REACTIVE_SIMPLE; // Default fallback
+static hsv_t saved_rgb_matrix_hsv = {HSV_BLUE}; // Properly initialize with braces
+static bool mode_saved = false;
+
 // Charybdis 3x5x3 LED layout
 // The split keyboard has LEDs arranged in a matrix where:
 // Left side LEDs typically have indices 0 to (RGBLED_NUM/2-1)
 // Right side LEDs typically have indices (RGBLED_NUM/2) to (RGBLED_NUM-1)
 
 #ifdef RGB_MATRIX_ENABLE
-// Function to set color for only the left side of the keyboard
-void rgb_matrix_set_left_side(uint8_t hue, uint8_t sat, uint8_t val) {
-    // Force RGB matrix into solid color mode
-    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    
-    // Convert HSV to RGB
-    HSV hsv = {hue, sat, val};
-    RGB rgb = hsv_to_rgb(hsv);
-    
-    // Set only left side LEDs (0-17)
-    for (uint8_t i = 0; i <= 17; i++) {
-        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+// Forward declarations for functions
+void save_rgb_matrix_mode(void);
+void restore_rgb_matrix_mode(void);
+void update_rgb_for_layer(layer_state_t state);
+
+// Function to save the current RGB matrix mode
+void save_rgb_matrix_mode(void) {
+    if (!mode_saved) {
+        saved_rgb_matrix_mode = rgb_matrix_get_mode();
+        saved_rgb_matrix_hsv = rgb_matrix_get_hsv();
+        mode_saved = true;
     }
-    
-    // Force update of the LED buffers
-    rgb_matrix_update_pwm_buffers();
 }
 
-// Function to set color for only the right side of the keyboard
-void rgb_matrix_set_right_side(uint8_t hue, uint8_t sat, uint8_t val) {
-    // Force RGB matrix into solid color mode
-    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    
-    // Convert HSV to RGB
-    HSV hsv = {hue, sat, val};
-    RGB rgb = hsv_to_rgb(hsv);
-    
-    // Set only right side LEDs (18-35)
-    for (uint8_t i = 18; i < RGB_MATRIX_LED_COUNT; i++) {
-        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+// Function to restore the saved RGB matrix mode
+void restore_rgb_matrix_mode(void) {
+    if (mode_saved) {
+        rgb_matrix_mode_noeeprom(saved_rgb_matrix_mode);
+        rgb_matrix_sethsv_noeeprom(saved_rgb_matrix_hsv.h, saved_rgb_matrix_hsv.s, saved_rgb_matrix_hsv.v);
+        mode_saved = false;
     }
-    
-    // Force update of the LED buffers
-    rgb_matrix_update_pwm_buffers();
 }
 
 // Function to handle RGB color changes for homerow mods
 void update_rgb_for_homerow_mods(uint16_t keycode, smtd_action action) {
     // Change RGB color based on homerow mod activation
     if (action == SMTD_ACTION_HOLD) {
+        save_rgb_matrix_mode(); // Save current mode before changing
         homerow_mod_active = true; // Set the flag
-        rgb_matrix_set_suspend_state(true); // Suspend main RGB task
         
-        // Use the actual modifier keycode for the switch
-        uint16_t mod_keycode = 0;
-        // Map HRM_ keycode back to the modifier it represents
         switch (keycode) {
-            case HRM_A: mod_keycode = KC_LGUI; break;
-            case HRM_S: mod_keycode = KC_LALT; break;
-            case HRM_D: mod_keycode = KC_LCTL; break;
-            case HRM_F: mod_keycode = KC_LSFT; break;
-            case HRM_J: mod_keycode = KC_RSFT; break;
-            case HRM_K: mod_keycode = KC_RCTL; break;
-            case HRM_L: mod_keycode = KC_LALT; break; // Note: Keymap uses LALT for HRM_L
-            case HRM_QUOT: mod_keycode = KC_RGUI; break;
-        }
-
-        if (mod_keycode != 0) { // Only proceed if a valid mod was found
-            switch (mod_keycode) {
-                // Left-hand mods - only light up left side
-                case KC_LGUI: // Pink
-                    rgb_matrix_set_left_side(HSV_PINK);
-                    break;
-                case KC_LALT: // Green (Used by S and L)
-                    if (keycode == HRM_S) { // Check original keycode for S
-                        rgb_matrix_set_left_side(HSV_GREEN);
-                    } else { // Must be L
-                         rgb_matrix_set_right_side(HSV_GREEN);
-                    }
-                    break;
-                case KC_LCTL: // Blue
-                    rgb_matrix_set_left_side(HSV_BLUE);
-                    break;
-                case KC_LSFT: // Yellow
-                    rgb_matrix_set_left_side(HSV_YELLOW);
-                    break;
-
-                // Right-hand mods - only light up right side
-                case KC_RSFT: // Yellow
-                    rgb_matrix_set_right_side(HSV_YELLOW);
-                    break;
-                case KC_RCTL: // Blue
-                    rgb_matrix_set_right_side(HSV_BLUE);
-                    break;
-                // KC_LALT handled above for HRM_L
-                case KC_RGUI: // Pink
-                    rgb_matrix_set_right_side(HSV_PINK);
-                    break;
-            }
+            // Left-hand home row mods
+            case HRM_A:  // GUI - Pink
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_sethsv_noeeprom(HSV_PINK);
+                break;
+            case HRM_S:  // ALT - Green
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                break;
+            case HRM_D:  // CTRL - Blue
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                break;
+            case HRM_F:  // SHIFT - Yellow
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_LEFT);
+                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                break;
+            
+            // Right-hand home row mods
+            case HRM_J:  // SHIFT - Yellow
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                break;
+            case HRM_K:  // CTRL - Blue
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                break;
+            case HRM_L:  // ALT - Green
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                break;
+            case HRM_QUOT:  // GUI - Pink
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR_RIGHT);
+                rgb_matrix_sethsv_noeeprom(HSV_PINK);
+                break;
         }
     } 
     // Reset flag and resume RGB task when modifier is released
     else if (action == SMTD_ACTION_RELEASE) {
         homerow_mod_active = false; // Clear the flag
-        rgb_matrix_set_suspend_state(false); // Resume main RGB task
-        // Layer color should update naturally.
+        restore_rgb_matrix_mode(); // Restore the saved mode
+        update_rgb_for_layer(layer_state); // Update for current layer
     }
 }
 
@@ -141,48 +123,50 @@ void update_rgb_for_layer(layer_state_t state) {
         return;
     }
     
-    switch (get_highest_layer(state)) {
-        case LAYER_BASE:
-            // Set color for base layer (e.g., white)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            //rgb_matrix_sethsv_noeeprom(HSV_WHITE);
-            rgb_matrix_sethsv_noeeprom(0, 0, 0); // Off
-            break;
-        case LAYER_FUNCTION:
-            // Set color for function layer (e.g., blue)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-            break;
-        case LAYER_NAVIGATION:
-            // Set color for navigation layer (e.g., green)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-            break;
-        case LAYER_MEDIA:
-            // Set color for media layer (e.g., yellow)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-            break;
-        case LAYER_POINTER:
-            // Set color for pointer layer (e.g., cyan)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_CYAN);
-            break;
-        case LAYER_NUMERAL:
-            // Set color for numeral layer (e.g., orange)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
-            break;
-        case LAYER_SYMBOLS:
-            // Set color for symbols layer (e.g., magenta)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
-            break;
-        default:
-            // Optional: Set a default color or turn off LEDs for other layers
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(0, 0, 0); // Off
-            break;
+    // Base layer restores the saved mode, all others set specific colors
+    uint8_t highest_layer = get_highest_layer(state);
+    if (highest_layer == LAYER_BASE) {
+        restore_rgb_matrix_mode();
+    } else {
+        save_rgb_matrix_mode();
+        
+        switch (highest_layer) {
+            case LAYER_FUNCTION:
+                // Set color for function layer (e.g., blue)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                break;
+            case LAYER_NAVIGATION:
+                // Set color for navigation layer (e.g., green)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                break;
+            case LAYER_MEDIA:
+                // Set color for media layer (e.g., yellow)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                break;
+            case LAYER_POINTER:
+                // Set color for pointer layer (e.g., cyan)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_CYAN);
+                break;
+            case LAYER_NUMERAL:
+                // Set color for numeral layer (e.g., orange)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
+                break;
+            case LAYER_SYMBOLS:
+                // Set color for symbols layer (e.g., magenta)
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
+                break;
+            default:
+                // For any other layers, restore the default mode
+                restore_rgb_matrix_mode();
+                break;
+        }
     }
 } 
 #endif // RGB_MATRIX_ENABLE 
+

@@ -56,6 +56,14 @@
     
     // Enable solid color effect (needed for layer indicators)
     #define RGB_MATRIX_SOLID_COLOR_ENABLE
+    // Enable RGB matrix data sync between halves
+    #define SPLIT_TRANSPORT_MIRROR
+    #define RGB_MATRIX_SPLIT_ENABLE 
+    #define SPLIT_LAYER_STATE_ENABLE
+    #define SPLIT_LED_STATE_ENABLE
+    // Define the split keyboard LED configuration
+    #define RGB_MATRIX_LED_COUNT 36
+    #define RGB_MATRIX_SPLIT { 18, 18 }  // 18 LEDs on the left, 18 LEDs on the right
 #endif
 
 // SM Tap Dance configuration
