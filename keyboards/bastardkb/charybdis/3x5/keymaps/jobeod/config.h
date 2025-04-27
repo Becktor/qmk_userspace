@@ -27,10 +27,9 @@
 #endif // __arm__
 
 /* Charybdis-specific features. */
+#define POINTING_DEVICE_INVERT_Y
 
 #ifdef POINTING_DEVICE_ENABLE
-#    define POINTING_DEVICE_INVERT_X
-#    define POINTING_DEVICE_INVERT_Y
 // Automatically enable the pointer layer when moving the trackball.  See also:
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS`
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD`

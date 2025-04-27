@@ -1,0 +1,135 @@
+layers:
+  L0:
+  - - Q
+    - W
+    - E
+    - R
+    - T
+    - {t: A, h: MOD_LGUI}
+    - {t: S, h: MOD_LALT}
+    - {t: D, h: MOD_LCTL}
+    - {t: F, h: MOD_LSFT}
+    - G
+  - - {t: Z, h: L4}
+    - X
+    - C
+    - V
+    - B
+    - {t: TAB, h: L1}
+    - ''
+    - {t: ESC, h: L3}
+    - {t: SPC, h: L2}
+    - ''
+  - - P
+    - O
+    - I
+    - U
+    - Y
+    - {t: '''', h: MOD_LGUI|MOD_RGUI}
+    - {t: L, h: MOD_LALT}
+    - {t: K, h: MOD_LCTL|MOD_RCTL}
+    - {t: J, h: MOD_LSFT|MOD_RSFT}
+    - H
+  - - {t: /, h: L4}
+    - .
+    - ','
+    - M
+    - N
+    - {t: ENT, h: L6}
+    - ''
+    - {t: BSPC, h: L5}
+    - ''
+    - ''
+  L1:
+  - ['', '', '', '', '', LGUI, LALT, LCTL, LSFT, '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
+    - ''
+    - ''
+    - ''
+    - ''
+  - [F12, F9, F8, F7, PSCR, F11, F6, F5, F4, SLCK]
+  - [F10, F3, F2, F1, PAUS, '', '', '', '', '']
+  L2:
+  - ['', '', '', '', '', LGUI, LALT, LCTL, LSFT, '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
+    - ''
+  - ['', '', '', '', '', RGHT, UP, DOWN, LEFT, CAPS]
+  - [END, PGUP, PGDN, HOME, INS, ENT, '', BSPC, '', '']
+  L3:
+  - ['', RGB RMOD, RGB TOG, RGB MOD, '', MPRV, VOLD, MUTE, VOLU, MNXT]
+  - - ''
+    - ''
+    - ''
+    - QK CLEAR EEPROM
+    - RESET
+    - MSTP
+    - ''
+    - {type: held}
+    - MPLY
+    - ''
+  - ['', RGB MOD, RGB TOG, RGB RMOD, '', MNXT, VOLU, MUTE, VOLD, MPRV]
+  - ['', '', '', QK CLEAR EEPROM, RESET, MSTP, '', MPLY, '', '']
+  L4:
+  - [RESET, QK CLEAR EEPROM, '', CUSTOM(0), CUSTOM(2), LGUI, LALT, LCTL, LSFT, '']
+  - - {type: held}
+    - CUSTOM(6)
+    - CUSTOM(4)
+    - ''
+    - ''
+    - MS BTN3
+    - ''
+    - MS BTN2
+    - MS BTN1
+    - ''
+  - [RESET, QK CLEAR EEPROM, '', CUSTOM(0), CUSTOM(2), LGUI, LALT, LCTL, LSFT, '']
+  - - {t: ▽, type: trans}
+    - CUSTOM(6)
+    - CUSTOM(4)
+    - ''
+    - ''
+    - MS BTN3
+    - ''
+    - MS BTN1
+    - ''
+    - ''
+  L5:
+  - ['[', '7', '8', '9', ']', ;, '4', '5', '6', '=']
+  - ['`', '1', '2', '3', \, '-', '', ., '0', '']
+  - ['', '', '', '', '', LGUI, LALT, LCTL, LSFT, '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
+    - ''
+    - ''
+  L6:
+  - ['Sft+[', Sft+7, Sft+8, Sft+9, 'Sft+]', Sft+;, Sft+4, Sft+5, Sft+6, Sft+=]
+  - [Sft+`, Sft+1, Sft+2, Sft+3, Sft+\, Sft+-, '', Sft+9, Sft+0, '']
+  - ['', '', '', '', '', LGUI, LALT, LCTL, LSFT, '']
+  - - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - {type: held}
+    - ''
+    - ''
+    - ''
+    - ''

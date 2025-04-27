@@ -1,0 +1,50 @@
+layout: {qmk_keyboard: jobe/charybdis/5x3x3}
+layers:
+  LB:
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - {t: A, h: LGUI}
+  - {t: S, h: LALT}
+  - {t: D, h: LCTL}
+  - {t: F, h: LSFT}
+  - G
+  - H
+  - {t: J, h: RSFT}
+  - {t: K, h: RCTL}
+  - {t: L, h: LALT}
+  - {t: '''', h: RGUI}
+  - LT(LAYER POINTER,\Z)
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - {t: SLSH, h: M-LP}
+  - {t: BSPC, h: M-LNU}
+  - {t: SPC, h: M-LN}
+  - {t: TAB, h: M-LF}
+  - {t: ESC, h: M-LM}
+  - {t: BSPC, h: M-LNU}
+  - {t: ENT, h: L-LS}
+  LF: ['', '', '', '', '', PSCR, F7, F8, F9, F12, LGUI, LALT, LCTL, LSFT, '', SCRL, F4, F5, F6, F11, '', '', '', '', '', PAUS, F1, F2, F3, F10, '', '', '', '', '',
+    '']
+  LN: ['', '', '', '', '', '', '', '', '', '', LGUI, LALT, LCTL, LSFT, '', LEFT, DOWN, UP, RGHT, CAPS, '', '', '', '', '', HOME, PGDN, PGUP, END, INS, '', '', '',
+    ENT, BSPC, '']
+  LM: ['', RGB RMOD, RGB TOG, RGB MOD, '', '', RGB RMOD, RGB TOG, RGB MOD, '', MPRV, VOLD, MUTE, VOLU, MNXT, MPRV, VOLD, MUTE, VOLU, MNXT, '', '', '', EE CLR, QK
+      BOOT, QK BOOT, EE CLR, '', '', '', '', MPLY, MSTP, MSTP, MPLY, '']
+  LP: ['[', '7', '8', '9', ']', '', '', '', '', '', ;, '4', '5', '6', '=', '', LSFT, LCTL, LALT, LGUI, '`', '1', '2', '3', \, '', '', '', '', '', ., '0', '-', '',
+    '', '']
+  LNU: [QK BOOT, EE CLR, '', DPI DEC, '', '', DPI INC, '', EE CLR, QK BOOT, LGUI, LALT, LCTL, LSFT, '', '', LSFT, LCTL, LALT, LGUI, '', '', '', '', '', '', '', '',
+    '', '', BTN2, BTN1, BTN3, BTN3, BTN1, '']
+  LS: ['{', '&', '*', (, '}', '', '', '', '', '', ':', $, '%', ^, +, '', LSFT, LCTL, LALT, LGUI, '~', '!', '@', '#', '|', '', '', '', '', '', (, ), _, '', '', '']

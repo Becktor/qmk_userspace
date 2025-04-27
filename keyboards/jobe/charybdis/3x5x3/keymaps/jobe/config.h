@@ -27,12 +27,51 @@
 #endif // __arm__
 
 /* Charybdis-specific features. */
+#define MAX_DEFERRED_EXECUTORS 10
+
+#define CHARYBDIS_DRAGSCROLL_REVERSE_X
 
 #ifdef POINTING_DEVICE_ENABLE
-#    define POINTING_DEVICE_INVERT_X
-#    define POINTING_DEVICE_INVERT_Y
 // Automatically enable the pointer layer when moving the trackball.  See also:
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS`
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD`
 // #define CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #endif // POINTING_DEVICE_ENABLE
+
+// Add this line for RGB layer indication
+#define RGB_MATRIX_LAYER_INDICATORS
+
+// Make sure RGB Matrix is fully enabled and configured
+#ifdef RGB_MATRIX_ENABLE
+    // Enable the RGB Matrix effects
+    #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+    #define RGB_MATRIX_KEYPRESSES
+    
+    // Allow RGB Matrix to be used with layers
+    #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
+    #define RGB_MATRIX_HUE_STEP 8
+    #define RGB_MATRIX_SAT_STEP 8
+    #define RGB_MATRIX_VAL_STEP 8
+    #define RGB_MATRIX_SPD_STEP 10
+    
+    // Enable solid color effect (needed for layer indicators)
+    #define RGB_MATRIX_SOLID_COLOR_ENABLE
+#endif
+
+// SM Tap Dance configuration
+#ifndef MAX_DEFERRED_EXECUTORS
+#define MAX_DEFERRED_EXECUTORS 10
+#endif
+
+// Add a delay to avoid immediate activation when pressing multiple keys
+#define SMTD_GLOBAL_SIMULTANEOUS_PRESSES_DELAY_MS 100
+
+// Customize SM Tap Dance timing (optional)
+#define SMTD_GLOBAL_TAP_TERM 200
+#define SMTD_GLOBAL_SEQUENCE_TERM 100
+#define SMTD_GLOBAL_FOLLOWING_TAP_TERM 200
+#define SMTD_GLOBAL_RELEASE_TERM 50
+
+// Enable mods recall and tap aggregation
+#define SMTD_GLOBAL_MODS_RECALL true
+#define SMTD_GLOBAL_AGGREGATE_TAPS false
