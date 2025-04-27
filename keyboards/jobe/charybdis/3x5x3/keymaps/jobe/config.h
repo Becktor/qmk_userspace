@@ -29,7 +29,7 @@
 /* Charybdis-specific features. */
 #define MAX_DEFERRED_EXECUTORS 10
 
-#define CHARYBDIS_DRAGSCROLL_REVERSE_X
+#define CHARYBDIS_DRAGSCROLL_REVERSE_Y
 
 #ifdef POINTING_DEVICE_ENABLE
 // Automatically enable the pointer layer when moving the trackball.  See also:
@@ -63,15 +63,15 @@
 #define MAX_DEFERRED_EXECUTORS 10
 #endif
 
-// Add a delay to avoid immediate activation when pressing multiple keys
-#define SMTD_GLOBAL_SIMULTANEOUS_PRESSES_DELAY_MS 100
+// // Add a delay to avoid immediate activation when pressing multiple keys
+// #define SMTD_GLOBAL_SIMULTANEOUS_PRESSES_DELAY_MS 50
 
 // Customize SM Tap Dance timing (optional)
-#define SMTD_GLOBAL_TAP_TERM 200
-#define SMTD_GLOBAL_SEQUENCE_TERM 100
+#define SMTD_GLOBAL_TAP_TERM 300
 #define SMTD_GLOBAL_FOLLOWING_TAP_TERM 200
+#define SMTD_GLOBAL_SEQUENCE_TERM 150
 #define SMTD_GLOBAL_RELEASE_TERM 50
 
-// Enable mods recall and tap aggregation
-#define SMTD_GLOBAL_MODS_RECALL true
-#define SMTD_GLOBAL_AGGREGATE_TAPS false
+// // Enable mods recall and tap aggregation
+// #define SMTD_GLOBAL_MODS_RECALL true
+// #define SMTD_GLOBAL_AGGREGATE_TAPS false

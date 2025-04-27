@@ -46,12 +46,17 @@ enum custom_keycodes {
 
 // Include sm_td.h AFTER the enum with SMTD_KEYCODES_BEGIN and SMTD_KEYCODES_END
 #include "sm_td.h"
+#include "rgb_effects.h" // Include the RGB effects
+
+// Define the global flag used by rgb_effects.h
+bool homerow_mod_active = false;
 
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
 #endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // Original SMTD processing (keep this active)
     if (!process_smtd(keycode, record)) {
         return false;
     }
@@ -65,17 +70,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
     switch (keycode) {
         // Left-hand home row mods
-        SMTD_MT(HRM_A, KC_A, KC_LGUI, 1500)  // Regular mod-tap behavior with longer threshold
-        SMTD_MT(HRM_S, KC_S, KC_LALT, 1200)  // Regular mod-tap behavior
-        SMTD_MT(HRM_D, KC_D, KC_LCTL, 1200)  // Regular mod-tap behavior
-        SMTD_MT(HRM_F, KC_F, KC_LSFT, 1200)  // Regular mod-tap behavior
+        SMTD_MT(HRM_A, KC_A, KC_LGUI, 1000)  // Regular mod-tap behavior with longer threshold
+        SMTD_MT(HRM_S, KC_S, KC_LALT, 1000)  // Regular mod-tap behavior
+        SMTD_MT(HRM_D, KC_D, KC_LCTL, 1000)  // Regular mod-tap behavior
+        SMTD_MT(HRM_F, KC_F, KC_LSFT, 1000)  // Regular mod-tap behavior
         
         // Right-hand home row mods
-        SMTD_MT(HRM_J, KC_J, KC_RSFT, 1200)  // Regular mod-tap behavior
-        SMTD_MT(HRM_K, KC_K, KC_RCTL, 1200)  // Regular mod-tap behavior
-        SMTD_MT(HRM_L, KC_L, KC_LALT, 1200)  // Regular mod-tap behavior
-        SMTD_MT(HRM_QUOT, KC_QUOT, KC_RGUI, 1500)  // Regular mod-tap behavior with longer threshold
+        SMTD_MT(HRM_J, KC_J, KC_RSFT, 1000)  // Regular mod-tap behavior
+        SMTD_MT(HRM_K, KC_K, KC_RCTL, 1000)  // Regular mod-tap behavior
+        SMTD_MT(HRM_L, KC_L, KC_LALT, 1000)  // Regular mod-tap behavior
+        SMTD_MT(HRM_QUOT, KC_QUOT, KC_RGUI, 1000)  // Regular mod-tap behavior with longer threshold
     }
+
+// --- RE-ENABLE homerow RGB call --- 
+#ifdef RGB_MATRIX_ENABLE
+    // Call the RGB handling function for homerow mods
+    update_rgb_for_homerow_mods(keycode, action);
+#endif
 }
 
 // Automatically enable sniping-mode on the pointer layer.
@@ -297,49 +308,10 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     // Original auto-sniping logic
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
 
-    // Add layer indicator logic
-    switch (get_highest_layer(state)) {
-        case LAYER_BASE:
-            // Set color for base layer (e.g., white)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_WHITE);
-            break;
-        case LAYER_FUNCTION:
-            // Set color for function layer (e.g., blue)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_BLUE);
-            break;
-        case LAYER_NAVIGATION:
-            // Set color for navigation layer (e.g., green)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-            break;
-        case LAYER_MEDIA:
-            // Set color for media layer (e.g., yellow)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
-            break;
-        case LAYER_POINTER:
-            // Set color for pointer layer (e.g., cyan) - Note: might conflict with auto pointer layer effect
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_CYAN);
-            break;
-        case LAYER_NUMERAL:
-            // Set color for numeral layer (e.g., orange)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
-            break;
-        case LAYER_SYMBOLS:
-            // Set color for symbols layer (e.g., magenta)
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
-            break;
-        default:
-            // Optional: Set a default color or turn off LEDs for other layers
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-            rgb_matrix_sethsv_noeeprom(0, 0, 0); // Off
-            break;
-    }
+#ifdef RGB_MATRIX_ENABLE
+    // Use the RGB layer color function from rgb_effects.h
+    update_rgb_for_layer(state);
+#endif
 
     return state;
 }
