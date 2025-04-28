@@ -34,6 +34,17 @@ static uint8_t saved_rgb_matrix_mode = RGB_MATRIX_SOLID_REACTIVE_SIMPLE; // Defa
 static hsv_t saved_rgb_matrix_hsv = {HSV_BLUE}; // Properly initialize with braces
 static bool mode_saved = false;
 
+// Tokyo Night theme HSV color definitions - more deeply saturated and darkened
+#define HSV_TOKYO_TEAL     170, 255, 120  // Deeper teal, less whitish
+#define HSV_TOKYO_BLUE     215, 255, 120  // Deeper blue, more saturated
+#define HSV_TOKYO_PURPLE   280, 255, 120  // Stronger purple
+#define HSV_TOKYO_MAGENTA  330, 255, 130  // Rich magenta
+#define HSV_TOKYO_PINK     350, 255, 130  // Stronger pink
+#define HSV_TOKYO_ORANGE    10, 255, 140  // Deeper orange
+#define HSV_TOKYO_YELLOW    60, 255, 130  // Richer yellow
+#define HSV_TOKYO_GREEN    120, 255, 100  // More vivid green
+#define HSV_TOKYO_SEAFOAM  160, 255, 100  // Deeper seafoam
+
 // Charybdis 3x5x3 LED layout
 // The split keyboard has LEDs arranged in a matrix where:
 // Left side LEDs typically have indices 0 to (RGBLED_NUM/2-1)
@@ -72,39 +83,39 @@ void update_rgb_for_homerow_mods(uint16_t keycode, smtd_action action) {
         
         switch (keycode) {
             // Left-hand home row mods - use our custom animation that only affects left side
-            case HRM_A:  // GUI - Pink
+            case HRM_A:  // GUI - Tokyo Pink
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
-                rgb_matrix_sethsv_noeeprom(HSV_PINK);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_PINK);
                 break;
-            case HRM_S:  // ALT - Green
+            case HRM_S:  // ALT - Tokyo Green
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
-                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_GREEN);
                 break;
-            case HRM_D:  // CTRL - Blue
+            case HRM_D:  // CTRL - Tokyo Blue
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
-                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_BLUE);
                 break;
-            case HRM_F:  // SHIFT - Yellow
+            case HRM_F:  // SHIFT - Tokyo Yellow
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_LEFT);
-                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_YELLOW);
                 break;
             
             // Right-hand home row mods - use our custom animation that only affects right side
-            case HRM_J:  // SHIFT - Yellow
+            case HRM_J:  // SHIFT - Tokyo Yellow
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
-                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_YELLOW);
                 break;
-            case HRM_K:  // CTRL - Blue
+            case HRM_K:  // CTRL - Tokyo Blue
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
-                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_BLUE);
                 break;
-            case HRM_L:  // ALT - Green
+            case HRM_L:  // ALT - Tokyo Green
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
-                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_GREEN);
                 break;
-            case HRM_QUOT:  // GUI - Pink
+            case HRM_QUOT:  // GUI - Tokyo Pink
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SOLID_COLOR_RIGHT);
-                rgb_matrix_sethsv_noeeprom(HSV_PINK);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_PINK);
                 break;
         }
     } 
@@ -132,34 +143,34 @@ void update_rgb_for_layer(layer_state_t state) {
         
         switch (highest_layer) {
             case LAYER_FUNCTION:
-                // Set color for function layer (e.g., blue)
+                // Function layer - Tokyo Blue
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_BLUE);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_BLUE);
                 break;
             case LAYER_NAVIGATION:
-                // Set color for navigation layer (e.g., green)
+                // Navigation layer - Tokyo Teal
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_TEAL);
                 break;
             case LAYER_MEDIA:
-                // Set color for media layer (e.g., yellow)
+                // Media layer - Tokyo Yellow
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_YELLOW);
                 break;
             case LAYER_POINTER:
-                // Set color for pointer layer (e.g., cyan)
+                // Pointer layer - Tokyo Seafoam
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_CYAN);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_SEAFOAM);
                 break;
             case LAYER_NUMERAL:
-                // Set color for numeral layer (e.g., orange)
+                // Numeral layer - Tokyo Orange
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_ORANGE);
                 break;
             case LAYER_SYMBOLS:
-                // Set color for symbols layer (e.g., magenta)
+                // Symbols layer - Tokyo Purple
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-                rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
+                rgb_matrix_sethsv_noeeprom(HSV_TOKYO_PURPLE);
                 break;
             default:
                 // For any other layers, restore the default mode

@@ -1,7 +1,7 @@
-RGB_MATRIX_EFFECT(CUSTOM_SOLID_LEFT)
+RGB_MATRIX_EFFECT(SOLID_COLOR_LEFT)
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-bool CUSTOM_SOLID_LEFT(effect_params_t* params) {
+bool SOLID_COLOR_LEFT(effect_params_t* params) {
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
     rgb_t rgb = rgb_matrix_hsv_to_rgb(rgb_matrix_config.hsv);

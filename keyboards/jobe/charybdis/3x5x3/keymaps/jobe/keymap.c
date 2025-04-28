@@ -50,6 +50,8 @@ enum custom_keycodes {
 
 // Define the global flag used by rgb_effects.h
 bool homerow_mod_active = false;
+// Define flag for layer-tap detection
+bool layer_tap_active = false;
 
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
@@ -60,6 +62,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_smtd(keycode, record)) {
         return false;
     }
+    
+    // Check for layer-tap keycodes
+#ifdef RGB_MATRIX_ENABLE
+    // Detect layer-tap keycodes
+    // We can't directly match the macros, so we need to check for the LT() expanded values
+    switch (keycode) {
+        case LT(LAYER_MEDIA, KC_ESC):      // ESC_MED
+        case LT(LAYER_NAVIGATION, KC_SPC): // SPC_NAV
+        case LT(LAYER_FUNCTION, KC_TAB):   // TAB_FUN
+        case LT(LAYER_SYMBOLS, KC_ENT):    // ENT_SYM
+        case LT(LAYER_NUMERAL, KC_BSPC):   // BSP_NUM
+        case LT(LAYER_NUMERAL, KC_DEL):    // DEL_NUM
+            update_rgb_for_layer_tap(keycode, record->event.pressed);
+            break;
+        default:
+            // Check if it's a pointer layer key (wrapped in _L_PTR macro)
+            if ((keycode & 0xFF00) == (LT(LAYER_POINTER, 0) & 0xFF00)) {
+                update_rgb_for_layer_tap(keycode, record->event.pressed);
+            }
+            break;
+    }
+#endif
     
     // Add any other custom keycode handling here if needed
     
@@ -307,11 +331,6 @@ void matrix_scan_user(void) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     // Original auto-sniping logic
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
-
-#ifdef RGB_MATRIX_ENABLE
-    // Use the RGB layer color function from rgb_effects.h
-    update_rgb_for_layer(state);
-#endif
 
     return state;
 }

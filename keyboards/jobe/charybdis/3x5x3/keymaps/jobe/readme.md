@@ -60,4 +60,4 @@ The trigger sensibility can also be tuned. The lower the value, the more sensibl
 
 ## Layout
 
-![Keymap layout (generated with keyboard-layout-editor.com)](https://i.imgur.com/uHEnqEN.png)
+![Keymap layout (generated with keyboard-layout-editor.com)](my_keymap.png)
